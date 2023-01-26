@@ -46,11 +46,26 @@ parser.add_argument('--wandb_project', type=str)
 parser.add_argument('--device_train_microbatch_size', type=int)
 args = parser.parse_args()
 
+def get_layers(module, flat_children):
+    # Check if given module has no children and parameters.
+    if (len(list(module.children())) == 0 and len(list(module.parameters())) > 0):
+        flat_children.append(module)
+    else:
+        # Otherwise, continue the search over its children.
+        for child in module.children():
+            get_layers(child, flat_children)
+
 class StableDiffusion(composer.models.ComposerModel):
 
     def __init__(self, model_name: str = 'stabilityai/stable-diffusion-2-base'):
         super().__init__()
         self.unet = UNet2DConditionModel.from_pretrained(model_name, subfolder='unet')
+        # Reinit the unet
+        layers = []
+        get_layers(unet, layers)
+        for layer in layers:
+            if hasattr(layer, 'reset_parameters'):
+                layer.reset_parameters()
         if is_xformers_installed:
             self.unet.enable_xformers_memory_efficient_attention()
         self.vae = AutoencoderKL.from_pretrained(model_name, subfolder='vae')
