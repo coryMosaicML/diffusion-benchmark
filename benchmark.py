@@ -62,7 +62,7 @@ class StableDiffusion(composer.models.ComposerModel):
         self.unet = UNet2DConditionModel.from_pretrained(model_name, subfolder='unet')
         # Reinit the unet
         layers = []
-        get_layers(unet, layers)
+        get_layers(self.unet, layers)
         for layer in layers:
             if hasattr(layer, 'reset_parameters'):
                 layer.reset_parameters()
