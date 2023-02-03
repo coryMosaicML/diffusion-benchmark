@@ -1,7 +1,9 @@
 torch==1.12.1
 torchvision>=0.11.0
 mosaicml-streaming
-mosaicml[wandb]==0.12.0
+wandb
+#mosaicml[wandb]==0.12.0
+git+https://github.com/coryMosaicML/composer.git@32eead6ae96bcb3b90803969527205416214e322
 ninja # Faster xformers install
 diffusers[torch]
 transformers[torch]
