@@ -6,6 +6,7 @@ import argparse
 import composer
 import torch
 import torch.nn.functional as F
+from composer.algorithms import EMA
 from composer.utils import dist, reproducibility
 from diffusers import AutoencoderKL, DDPMScheduler, UNet2DConditionModel
 from torch.utils.data import DataLoader
@@ -13,7 +14,6 @@ from torchvision import transforms
 from transformers import CLIPTextModel
 
 
-from ema import EMA
 from data import StreamingLAIONDataset, SyntheticImageCaptionDataset
 
 try:
